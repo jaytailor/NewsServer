@@ -21,40 +21,46 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllNews(w http.ResponseWriter, r *http.Request) {
-	mdao := NewsDAO{Server:"localhost", Database:"news"}
+	mdao := DbDAO{Server:"localhost", Database:"news"}
 	mdao.Connect()
 
+	mainNewsStruct := NewsItem{Status:"OK"}
+
 	keys, ok := r.URL.Query()["list"]
-	var number_of_news int
+	var numberOfNews int
 	if !ok || len(keys[0]) < 1 {
 		fmt.Println("Url Param 'key' is missing")
-		number_of_news = 10
+		numberOfNews = 10
 	}else {
 		items, err := strconv.Atoi(keys[0])
 		if err == nil {
 			fmt.Printf("Number of news.. ")
 			fmt.Println(items)
-			number_of_news = items
+			numberOfNews = items
 		}
 	}
 
-	samachar, err := mdao.FindNumOfNews(number_of_news)
+	samachar, err := mdao.FindNumOfNews(numberOfNews)
 	if err != nil {
 		//respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
 
+	for _, element := range samachar{
+		mainNewsStruct.NewsItems = append(mainNewsStruct.NewsItems, element)
+	}
+
 	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 
-	if err := json.NewEncoder(w).Encode(samachar); err != nil {
+	if err := json.NewEncoder(w).Encode(mainNewsStruct); err != nil {
 		panic(err)
 	}
 }
 
 func PostNews(w http.ResponseWriter, r *http.Request) {
-	mdao := NewsDAO{Server:"localhost", Database:"news"}
+	mdao := DbDAO{Server:"localhost", Database:"news"}
 	mdao.Connect()
 	//defer session.Close()
 
@@ -78,7 +84,7 @@ func PostNews(w http.ResponseWriter, r *http.Request) {
 }
 
 func FindSpecificNews(w http.ResponseWriter, r *http.Request) {
-	mdao := NewsDAO{Server:"localhost", Database:"news"}
+	mdao := DbDAO{Server:"localhost", Database:"news"}
 	mdao.Connect()
 
 	params := mux.Vars(r)
@@ -93,7 +99,7 @@ func FindSpecificNews(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateNews(w http.ResponseWriter, r *http.Request) {
-	mdao := NewsDAO{Server:"localhost", Database:"news"}
+	mdao := DbDAO{Server:"localhost", Database:"news"}
 	mdao.Connect()
 
 	defer r.Body.Close()
@@ -118,7 +124,7 @@ func UpdateNews(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteNews(w http.ResponseWriter, r *http.Request) {
-	mdao := NewsDAO{Server:"localhost", Database:"news"}
+	mdao := DbDAO{Server:"localhost", Database:"news"}
 	mdao.Connect()
 
 	defer r.Body.Close()

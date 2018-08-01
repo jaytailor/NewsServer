@@ -32,6 +32,18 @@ var routes = Routes{
 		"/postnews",
 		PostNews,
 	},
+	Route{
+		"PostAds",
+		"POST",
+		"/postads",
+		PostAds,
+	},
+	Route{
+		"GetAllAds",
+		"GET",
+		"/getallads",
+		GetAllAds,
+	},
 }
 
 
