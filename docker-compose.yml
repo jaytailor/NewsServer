@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+   mongo:
+      image: mongo:2.6.11
+      restart: on-failure:3
+      volumes:
+          - mongo-db:/data/db
+          - mongo-configdb:/data/configdb
+      ports:
+        - "27017:27017"
+      expose:
+        - "27017"
+      command: --smallfiles
+
+   mongo-express:
+      image: mongo-express
+      restart: on-failure:3
+      environment:
+        - ME_CONFIG_BASICAUTH_USERNAME=
+        - ME_CONFIG_SITE_BASEURL=/mongo-express/
+      links:
+        - mongo
+      ports:
+        - "8081:8081"
+
+volumes:
+    mongo-db: {}
+    mongo-configdb: {}

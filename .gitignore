@@ -1,0 +1,21 @@
+### Project ###
+.DS_Store
+.idea
+debug
+debug.test
+main
+
+### Go ###
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+
+# Folders
+_obj
+_test
+
+# Db files
+db/WiredTiger*
+db/_mdb_catalog.wt
+db/*
