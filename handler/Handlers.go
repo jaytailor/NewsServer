@@ -74,7 +74,7 @@ func PostNews(w http.ResponseWriter, r *http.Request) {
 	samachar.Id = bson.NewObjectId()
 	samachar.PublishedAt = time.Now()
 
-	if err := mdao.Insert(samachar); err != nil {
+	if err := mdao.InsertNews(samachar); err != nil {
 		//respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
@@ -109,7 +109,7 @@ func UpdateNews(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 		return
 	}
-	if err := mdao.Update(samachar); err != nil {
+	if err := mdao.UpdateNews(samachar); err != nil {
 		//respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
@@ -134,7 +134,7 @@ func DeleteNews(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 		return
 	}
-	if err := mdao.Delete(samachar); err != nil {
+	if err := mdao.DeleteNews(samachar); err != nil {
 		//respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return

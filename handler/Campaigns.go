@@ -14,12 +14,12 @@ type Campaigns struct {
 	Id	bson.ObjectId	`bson:"_id" json:"id"`
 	ImageUrl string `bson:"imageurl" json:"imageurl"`
 	Expired bool `bson:"expired" json:"expired"`
-	StartDate time.Time `bson:"startdate" json:"startdate"`
-	EndDate time.Time	`bson:"enddate" json:"enddate"`
-	ImpressionLimit string `bson:"impressionlimit" json:"impressionlimit"`
-	ImpressionFreq string `bson:"impressionfreq" json:"impressionfreq"`
+	StartDate time.Time `bson:"start_date" json:"start_date"`
+	EndDate time.Time	`bson:"end_date" json:"end_date"`
+	ImpressionLimit string `bson:"impression_limit" json:"impression_limit"`
+	ImpressionFreq string `bson:"impression_freq" json:"impression_freq"`
 	Priority string `bson:"priority" json:"priority"`
-	CurrentImpressionCount string `bson:"currentimpressioncount" json:"currentimpressioncount"`
+	CurrentImpressionCount string `bson:"current_impression_count" json:"current_impression_count"`
 }
 
 type AdsList []Campaigns

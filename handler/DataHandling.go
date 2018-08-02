@@ -28,7 +28,10 @@ func (m *DbDAO) Connect() {
 
 }
 
-func (m *DbDAO) FindAll() ([]NewsModel, error) {
+
+// Helper mongo functions for News
+
+func (m *DbDAO) FindAllNews() ([]NewsModel, error) {
 	var news []NewsModel
 	err := db.C(COLLECTION).Find(bson.M{}).All(&news)
 	return news, err
@@ -46,21 +49,22 @@ func (m *DbDAO) FindById(id string) (NewsModel, error) {
 	return news, err
 }
 
-func (m *DbDAO) Insert(news NewsModel) error {
+func (m *DbDAO) InsertNews(news NewsModel) error {
 	err := db.C(COLLECTION).Insert(&news)
 	return err
 }
 
-func (m *DbDAO) Delete(news NewsModel) error {
+func (m *DbDAO) DeleteNews(news NewsModel) error {
 	err := db.C(COLLECTION).Remove(&news)
 	return err
 }
 
-func (m *DbDAO) Update(news NewsModel) error {
+func (m *DbDAO) UpdateNews(news NewsModel) error {
 	err := db.C(COLLECTION).UpdateId(news.Id, &news)
 	return err
 }
 
+// Helper mongo functions for ads
 
 func (m *DbDAO) InsertAds(ads Campaigns) error {
 	err := db.C(ADSTABLE).Insert(&ads)
@@ -73,3 +77,18 @@ func (m *DbDAO) FindAllCampaigns() ([]Campaigns, error) {
 	return campaigns, err
 }
 
+func (m *DbDAO) FindNumOfAds(number int) ([]Campaigns, error) {
+	var campaigns []Campaigns
+	err := db.C(ADSTABLE).Find(bson.M{}).Sort("-start_date").Limit(number).All(&campaigns)
+	return campaigns, err
+}
+
+func (m *DbDAO) DeleteAds(campaign Campaigns) error {
+	err := db.C(ADSTABLE).Remove(&campaign)
+	return err
+}
+
+func (m *DbDAO) DeleteAdById(id string) error {
+	err := db.C(ADSTABLE).Remove(bson.M{"id": id})
+	return err
+}

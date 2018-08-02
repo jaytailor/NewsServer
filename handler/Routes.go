@@ -33,6 +33,12 @@ var routes = Routes{
 		PostNews,
 	},
 	Route{
+		"DeleteNews",
+		"POST",
+		"/deletenews",
+		DeleteNews,
+	},
+	Route{
 		"PostAds",
 		"POST",
 		"/postads",
@@ -43,6 +49,12 @@ var routes = Routes{
 		"GET",
 		"/getallads",
 		GetAllAds,
+	},
+	Route{
+		"DeleteAds",
+		"POST",
+		"/deleteads",
+		DeleteAds,
 	},
 }
 
