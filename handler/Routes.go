@@ -56,6 +56,37 @@ var routes = Routes{
 		"/deleteads",
 		DeleteAds,
 	},
+	Route{
+		"PostVideos",
+		"POST",
+		"/postvideos",
+		PostVideos,
+	},
+	Route{
+		"GetAllVideos",
+		"GET",
+		"/getallvideos",
+		GetAllVideos,
+	},
+	Route{
+		"PostEditorial",
+		"POST",
+		"/posteditorial",
+		PostEditorial,
+	},
+	Route{
+		"GetAllEditorial",
+		"GET",
+		"/getalleditorial",
+		GetAllEditorial,
+	},
+	Route{
+		"GetImage",
+		"GET",
+		"/getimage",
+		GetImage,
+	},
+
 }
 
 

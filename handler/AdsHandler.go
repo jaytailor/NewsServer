@@ -19,6 +19,7 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 
 	mainNewsStruct := AdsItems{Status:"OK"}
 
+	defer r.Body.Close()
 	keys, ok := r.URL.Query()["list"]
 	var numberOfAds int
 	if !ok || len(keys[0]) < 1 {

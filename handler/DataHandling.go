@@ -16,6 +16,8 @@ var db *mgo.Database
 const (
 	COLLECTION = "news"
 	ADSTABLE = "ads"
+	VIDEOS = "videos"
+	EDITORIALS = "editorials"
 )
 
 func (m *DbDAO) Connect() {
@@ -91,4 +93,42 @@ func (m *DbDAO) DeleteAds(campaign Campaigns) error {
 func (m *DbDAO) DeleteAdById(id string) error {
 	err := db.C(ADSTABLE).Remove(bson.M{"id": id})
 	return err
+}
+
+// Helper mongo functions for video
+
+func (m *DbDAO) InsertVideos(video Video) error {
+	err := db.C(VIDEOS).Insert(&video)
+	return err
+}
+
+func (m *DbDAO) FindAllVideos() ([]Video, error) {
+	var video []Video
+	err := db.C(VIDEOS).Find(bson.M{}).All(&video)
+	return video, err
+}
+
+func (m *DbDAO) FindNumOfVideos(number int) ([]Video, error) {
+	var video []Video
+	err := db.C(VIDEOS).Find(bson.M{}).Sort("-video_date").Limit(number).All(&video)
+	return video, err
+}
+
+// Helper mongo functions for editorial
+
+func (m *DbDAO) InsertEditorial(editorial Editorial) error {
+	err := db.C(EDITORIALS).Insert(&editorial)
+	return err
+}
+
+func (m *DbDAO) FindAllEditorial() ([]Editorial, error) {
+	var editorials []Editorial
+	err := db.C(EDITORIALS).Find(bson.M{}).All(&editorials)
+	return editorials, err
+}
+
+func (m *DbDAO) FindNumOfEditorial(number int) ([]Editorial, error) {
+	var editorials []Editorial
+	err := db.C(EDITORIALS).Find(bson.M{}).Sort("-published_at").Limit(number).All(&editorials)
+	return editorials, err
 }

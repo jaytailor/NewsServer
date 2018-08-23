@@ -7,9 +7,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	//"io/ioutil"
-	//"io"
-	//"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2/bson"
 	"time"
 	"strconv"
@@ -26,6 +23,7 @@ func GetAllNews(w http.ResponseWriter, r *http.Request) {
 
 	mainNewsStruct := NewsItem{Status:"OK"}
 
+	defer r.Body.Close()
 	keys, ok := r.URL.Query()["list"]
 	var numberOfNews int
 	if !ok || len(keys[0]) < 1 {

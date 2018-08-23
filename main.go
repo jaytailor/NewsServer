@@ -8,9 +8,14 @@ import (
 )
 
 
+const (
+	STATIC_DIR = "/static/"
+	PORT       = "8080"
+)
+
 func main() {
 	router := handler.NewRouter()
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":"+PORT, router))
 }
 
 
