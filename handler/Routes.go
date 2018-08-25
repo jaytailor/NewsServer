@@ -81,10 +81,10 @@ var routes = Routes{
 		GetAllEditorial,
 	},
 	Route{
-		"GetImage",
-		"GET",
-		"/getimage",
-		GetImage,
+		"PostImage",
+		"POST",
+		"/postimage",
+		PostImage,
 	},
 
 }
