@@ -86,6 +86,18 @@ var routes = Routes{
 		"/postimage",
 		PostImage,
 	},
+	Route{
+		"Login",
+		"POST",
+		"/login",
+		Login,
+	},
+	Route{
+		"CreateUser",
+		"POST",
+		"/createuser",
+		CreateUser,
+	},
 
 }
 

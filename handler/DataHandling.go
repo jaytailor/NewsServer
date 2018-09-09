@@ -18,6 +18,7 @@ const (
 	ADSTABLE = "ads"
 	VIDEOS = "videos"
 	EDITORIALS = "editorials"
+	LOGIN = "login"
 )
 
 func (m *DbDAO) Connect() {
@@ -131,4 +132,17 @@ func (m *DbDAO) FindNumOfEditorial(number int) ([]Editorial, error) {
 	var editorials []Editorial
 	err := db.C(EDITORIALS).Find(bson.M{}).Sort("-published_at").Limit(number).All(&editorials)
 	return editorials, err
+}
+
+// Helper mongo functions for user logins
+
+func (m *DbDAO) CreateLogins(credentials Logins) error {
+	err := db.C(LOGIN).Insert(&credentials)
+	return err
+}
+
+func (m *DbDAO) FindUsers() ([]Logins, error) {
+	var credentials []Logins
+	err := db.C(LOGIN).Find(bson.M{}).All(&credentials)
+	return credentials, err
 }
