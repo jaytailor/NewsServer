@@ -30,23 +30,29 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}else {
 		logindetails, err := mdao.FindUsers();
 
-		if(err != nil){
+		if err != nil{
 			fmt.Println("Error fetching user details")
 			panic(err)
 			return
 		}
 
-		for _, element := range logindetails{
-			//editorialStruct.ArticleList = append(editorialStruct.ArticleList, element)
+		if len(logindetails) == 0{
+			response.Authenticated = "INVALID";
+			response.Message = "No users exist in the system";
+			SendResponse(w, http.StatusNotImplemented, response)
+			return
+		}
 
-			if(element.User != username[0]) {
+		for _, element := range logindetails{
+
+			if element.User != username[0] {
 				response.Authenticated = "FALSE";
 				response.Message = "Username is wrong";
 				SendResponse(w, http.StatusOK, response);
 				return
 			}
 
-			if(element.Password != password[0]){
+			if element.Password != password[0]{
 				response.Authenticated = "FALSE";
 				response.Message = "Username or Password is wrong";
 				SendResponse(w, http.StatusOK, response);
