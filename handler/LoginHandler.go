@@ -13,7 +13,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	//defer session.Close()
 
 	// Create a struct to respond back
-	response := Success{Authenticated: "TRUE"}
+	response := Success{Authenticated: "FALSE"}
 
 	// Close the request body in the end
 	defer r.Body.Close()
@@ -53,10 +53,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			response.Authenticated = "TRIE";
+			response.Authenticated = "TRUE";
 			response.Message = "User Authenticated";
 			SendResponse(w, http.StatusOK, response);
-			return
 		}
 	}
 
