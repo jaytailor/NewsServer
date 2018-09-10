@@ -48,14 +48,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			if element.User != username[0] {
 				response.Authenticated = "FALSE";
 				response.Message = "Username is wrong";
-				SendResponse(w, http.StatusOK, response);
+				SendResponse(w, http.StatusForbidden, response);
 				return
 			}
 
 			if element.Password != password[0]{
 				response.Authenticated = "FALSE";
 				response.Message = "Username or Password is wrong";
-				SendResponse(w, http.StatusOK, response);
+				SendResponse(w, http.StatusForbidden, response);
 				return
 			}
 
