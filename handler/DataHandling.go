@@ -28,7 +28,6 @@ func (m *DbDAO) Connect() {
 	}
 
 	db = session.DB(m.Database)
-	defer session.Close();
 }
 
 
