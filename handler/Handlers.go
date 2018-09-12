@@ -17,13 +17,18 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello world, %q", html.EscapeString(r.URL.Path))
 }
 
-func GetAllNews(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:"news"}
+var mdao DbDAO;
+
+func init(){
+	mdao = DbDAO{Server:"localhost?maxPoolSize=4096", Database:"news"}
 	mdao.Connect()
+}
+
+func GetAllNews(w http.ResponseWriter, r *http.Request) {
 
 	mainNewsStruct := NewsItem{Status:"OK"}
 
-	defer r.Body.Close()
+	//defer r.Body.Close()
 	keys, ok := r.URL.Query()["list"]
 	var numberOfNews int
 	if !ok || len(keys[0]) < 1 {
@@ -58,11 +63,11 @@ func GetAllNews(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostNews(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:"news"}
-	mdao.Connect()
+	//mdao := DbDAO{Server:"localhost", Database:"news"}
+	//mdao.Connect()
 	//defer session.Close()
 
-	defer r.Body.Close()
+	//defer r.Body.Close()
 	var samachar NewsModel
 	if err := json.NewDecoder(r.Body).Decode(&samachar); err != nil {
 		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")

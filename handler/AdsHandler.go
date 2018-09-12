@@ -13,13 +13,12 @@ type ID struct {
 	id string
 }
 
+
 func GetAllAds(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:"news"}
-	mdao.Connect()
 
 	mainNewsStruct := AdsItems{Status:"OK"}
 
-	defer r.Body.Close()
+	//defer r.Body.Close()
 	keys, ok := r.URL.Query()["list"]
 	var numberOfAds int
 	if !ok || len(keys[0]) < 1 {
@@ -55,11 +54,11 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostAds(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:"news"}
-	mdao.Connect()
+	//mdao := DbDAO{Server:"localhost", Database:"news"}
+	//mdao.Connect()
 	//defer session.Close()
 
-	defer r.Body.Close()
+	//defer r.Body.Close()
 	var ads Campaigns
 	if err := json.NewDecoder(r.Body).Decode(&ads); err != nil {
 		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
