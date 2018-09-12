@@ -20,6 +20,7 @@ type Campaigns struct {
 	ImpressionFreq string `bson:"impression_freq" json:"impression_freq"`
 	Priority string `bson:"priority" json:"priority"`
 	CurrentImpressionCount string `bson:"current_impression_count" json:"current_impression_count"`
+	Adtype string `bson:"adtype" json:"adtype"`
 }
 
 type AdsList []Campaigns

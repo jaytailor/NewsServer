@@ -82,7 +82,7 @@ func (m *DbDAO) FindAllCampaigns() ([]Campaigns, error) {
 
 func (m *DbDAO) FindNumOfAds(number int) ([]Campaigns, error) {
 	var campaigns []Campaigns
-	err := db.C(ADSTABLE).Find(bson.M{}).Sort("-start_date").Limit(number).All(&campaigns)
+	err := db.C(ADSTABLE).Find(bson.M{}).Sort("-priority").Limit(number).All(&campaigns)
 	return campaigns, err
 }
 
