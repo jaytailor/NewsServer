@@ -6,6 +6,3 @@ https://thenewstack.io/make-a-restful-json-api-go/
 https://medium.com/@matryer/production-ready-mongodb-in-go-for-beginners-ef6717a77219
 https://www.youtube.com/watch?v=Hc5SGZduC10&list=PLaoF-xhnnrRXZ95JGpey0BLF3kIX72wuP&index=1
 
-
-#incase i fail to build a good app
-https://codecanyon.net/item/android-news-app/10771397
