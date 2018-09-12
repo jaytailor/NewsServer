@@ -11,15 +11,8 @@ import (
 
 func GetAllEditorial(w http.ResponseWriter, r *http.Request) {
 
-	// Connect to the database and create an object
-	mdao := DbDAO{Server:"localhost", Database:EDITORIALS}
-	mdao.Connect()
-
 	// Create a struct to load the editorial articles
 	editorialStruct := EditorialItem{Status:"OK"}
-
-	// Close the request body in the end
-	defer r.Body.Close()
 
 	keys, ok := r.URL.Query()["list"]
 	var numberOfArticles int
@@ -38,7 +31,7 @@ func GetAllEditorial(w http.ResponseWriter, r *http.Request) {
 	articles, err := mdao.FindNumOfEditorial(numberOfArticles)
 
 	if err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
@@ -56,14 +49,10 @@ func GetAllEditorial(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostEditorial(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:EDITORIALS}
-	mdao.Connect()
-	//defer session.Close()
 
-	defer r.Body.Close()
 	var article Editorial
 	if err := json.NewDecoder(r.Body).Decode(&article); err != nil {
-		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		panic(err)
 		return
 	}
@@ -71,7 +60,7 @@ func PostEditorial(w http.ResponseWriter, r *http.Request) {
 	article.Id = bson.NewObjectId()
 
 	if err := mdao.InsertEditorial(article); err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}

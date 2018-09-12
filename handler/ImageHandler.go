@@ -17,6 +17,7 @@ type res struct {
 	msg string
 }
 
+// Not using these functions anymore.
 func PostImage(w http.ResponseWriter, r *http.Request){
 
 	if r.Method != http.MethodPost {

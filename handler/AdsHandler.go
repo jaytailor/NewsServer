@@ -22,13 +22,12 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 	keys, ok := r.URL.Query()["list"]
 	var numberOfAds int
 	if !ok || len(keys[0]) < 1 {
-		fmt.Println("Url Param 'key' is missing")
+		//fmt.Println("Url Param 'key' is missing")
 		numberOfAds = 10
 	}else {
 		items, err := strconv.Atoi(keys[0])
 		if err == nil {
-			fmt.Printf("Number of Ads.. ")
-			fmt.Println(items)
+			//fmt.Printf("Number of Ads.. ")
 			numberOfAds = items
 		}
 	}
@@ -36,7 +35,7 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 	ads, err := mdao.FindNumOfAds(numberOfAds)
 
 	if err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
@@ -54,21 +53,17 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostAds(w http.ResponseWriter, r *http.Request) {
-	//mdao := DbDAO{Server:"localhost", Database:"news"}
-	//mdao.Connect()
-	//defer session.Close()
 
-	//defer r.Body.Close()
 	var ads Campaigns
 	if err := json.NewDecoder(r.Body).Decode(&ads); err != nil {
-		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		panic(err)
 		return
 	}
 	ads.Id = bson.NewObjectId()
 
 	if err := mdao.InsertAds(ads); err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
@@ -77,22 +72,17 @@ func PostAds(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteAds(w http.ResponseWriter, r *http.Request) {
-
-	mdao := DbDAO{Server:"localhost", Database:"news"}
-	mdao.Connect()
-
-	defer r.Body.Close()
 	var ad Campaigns
 
 	if err := json.NewDecoder(r.Body).Decode(&ad); err != nil {
-		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		fmt.Println("error in decoding")
 		panic(err)
 		return
 	}
 
 	if err := mdao.DeleteAds(ad); err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}

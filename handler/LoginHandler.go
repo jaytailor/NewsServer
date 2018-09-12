@@ -8,15 +8,9 @@ import (
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:LOGIN}
-	mdao.Connect()
-	//defer session.Close()
 
 	// Create a struct to respond back
 	response := Success{Authenticated: "FALSE"}
-
-	// Close the request body in the end
-	defer r.Body.Close()
 
 	username, ok := r.URL.Query()["username"]
 	password, ok := r.URL.Query()["password"]
@@ -68,20 +62,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:LOGIN}
-	mdao.Connect()
-	//defer session.Close()
 
 	// Create a struct to respond back
 	response := Success{Authenticated: "TRUE", Message:"User Created Successfully"}
 
-	// Close the request body in the end
-	defer r.Body.Close()
-
 	// Load new user data from the post data
 	var userdata Logins
 	if err := json.NewDecoder(r.Body).Decode(&userdata); err != nil {
-		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		panic(err)
 		return
 	}
@@ -96,7 +84,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Creating user now %S %S %S", newuser.User, newuser.Password, newuser.Role);
 
 	if err := mdao.CreateLogins(newuser); err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}

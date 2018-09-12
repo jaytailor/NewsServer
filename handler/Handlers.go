@@ -14,38 +14,29 @@ import (
 
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello world, %q", html.EscapeString(r.URL.Path))
-}
-
-var mdao DbDAO;
-
-func init(){
-	mdao = DbDAO{Server:"localhost?maxPoolSize=4096", Database:"news"}
-	mdao.Connect()
+	fmt.Fprintf(w, "Welcome to Begun Darshan Server, %q", html.EscapeString(r.URL.Path))
 }
 
 func GetAllNews(w http.ResponseWriter, r *http.Request) {
 
 	mainNewsStruct := NewsItem{Status:"OK"}
 
-	//defer r.Body.Close()
 	keys, ok := r.URL.Query()["list"]
 	var numberOfNews int
 	if !ok || len(keys[0]) < 1 {
-		fmt.Println("Url Param 'key' is missing")
+		//fmt.Println("Url Param 'key' is missing")
 		numberOfNews = 10
 	}else {
 		items, err := strconv.Atoi(keys[0])
 		if err == nil {
-			fmt.Printf("Number of news.. ")
-			fmt.Println(items)
+			//fmt.Printf("Number of news.. ")
 			numberOfNews = items
 		}
 	}
 
 	samachar, err := mdao.FindNumOfNews(numberOfNews)
 	if err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
@@ -63,14 +54,10 @@ func GetAllNews(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostNews(w http.ResponseWriter, r *http.Request) {
-	//mdao := DbDAO{Server:"localhost", Database:"news"}
-	//mdao.Connect()
-	//defer session.Close()
 
-	//defer r.Body.Close()
 	var samachar NewsModel
 	if err := json.NewDecoder(r.Body).Decode(&samachar); err != nil {
-		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		panic(err)
 		return
 	}
@@ -78,7 +65,7 @@ func PostNews(w http.ResponseWriter, r *http.Request) {
 	samachar.PublishedAt = time.Now()
 
 	if err := mdao.InsertNews(samachar); err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
@@ -87,14 +74,12 @@ func PostNews(w http.ResponseWriter, r *http.Request) {
 }
 
 func FindSpecificNews(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:"news"}
-	mdao.Connect()
 
 	params := mux.Vars(r)
 	var samachar NewsModel
 	samachar, err := mdao.FindById(params["id"])
 	if err != nil {
-		//respondWithError(w, http.StatusBadRequest, "Invalid Movie ID")
+		respondWithError(w, http.StatusBadRequest, "Invalid Movie ID")
 		panic(err)
 		return
 	}
@@ -102,18 +87,15 @@ func FindSpecificNews(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateNews(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:"news"}
-	mdao.Connect()
 
-	defer r.Body.Close()
 	var samachar NewsModel
 	if err := json.NewDecoder(r.Body).Decode(&samachar); err != nil {
-		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		panic(err)
 		return
 	}
 	if err := mdao.UpdateNews(samachar); err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
@@ -127,18 +109,15 @@ func UpdateNews(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteNews(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:"news"}
-	mdao.Connect()
 
-	defer r.Body.Close()
 	var samachar NewsModel
 	if err := json.NewDecoder(r.Body).Decode(&samachar); err != nil {
-		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		panic(err)
 		return
 	}
 	if err := mdao.DeleteNews(samachar); err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
@@ -162,8 +141,3 @@ func respondWithJson(w http.ResponseWriter, status int, samachar NewsModel){
 }
 
 
-func ErrorPage(w http.ResponseWriter, r *http.Request)  {
-	vars := mux.Vars(r)
-	todoId := vars["todoId"]
-	fmt.Fprintln(w, "TodoShow: ", todoId)
-}

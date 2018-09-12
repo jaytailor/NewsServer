@@ -10,15 +10,8 @@ import (
 
 func GetAllVideos(w http.ResponseWriter, r *http.Request) {
 
-	// Connect to the database and create an object
-	mdao := DbDAO{Server:"localhost", Database:VIDEOS}
-	mdao.Connect()
-
 	// Create a struct to load the videos
 	videoStruct := VideoItems{Status:"OK"}
-
-	// Close the request body in the end
-	defer r.Body.Close()
 
 	keys, ok := r.URL.Query()["list"]
 	var numberOfVideos int
@@ -37,7 +30,7 @@ func GetAllVideos(w http.ResponseWriter, r *http.Request) {
 	videos, err := mdao.FindNumOfVideos(numberOfVideos)
 
 	if err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
@@ -55,21 +48,17 @@ func GetAllVideos(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostVideos(w http.ResponseWriter, r *http.Request) {
-	mdao := DbDAO{Server:"localhost", Database:VIDEOS}
-	mdao.Connect()
-	//defer session.Close()
 
-	defer r.Body.Close()
 	var video Video
 	if err := json.NewDecoder(r.Body).Decode(&video); err != nil {
-		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		panic(err)
 		return
 	}
 	video.Id = bson.NewObjectId()
 
 	if err := mdao.InsertVideos(video); err != nil {
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
