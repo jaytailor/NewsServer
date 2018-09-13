@@ -15,6 +15,8 @@ type Video struct {
 	Title string `bson:"title" json:"title"`
 	Url string `bson:"url" json:"url"`
 	Video_Date time.Time `bson:"video_date" json:"video_date"`
+	Status string `bson:"status" json:"status"`
+	Extra string `bson:"extra" json:"extra"`
 }
 
 type VideoList []Video

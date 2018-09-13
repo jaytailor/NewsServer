@@ -17,6 +17,8 @@ type Editorial struct {
 	Image string `bson:"image" json:"image"`
 	Writer string `bson:"writer" json:"writer"`
 	PublishedAt time.Time	`bson:"published_at" json:"published_at"`
+	Status string `bson:"status" json:"status"`
+	Extra string `bson:"extra" json:"extra"`
 }
 
 type ArticleList []Editorial

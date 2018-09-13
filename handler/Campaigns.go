@@ -21,6 +21,8 @@ type Campaigns struct {
 	Priority string `bson:"priority" json:"priority"`
 	CurrentImpressionCount string `bson:"current_impression_count" json:"current_impression_count"`
 	Adtype string `bson:"adtype" json:"adtype"`
+	Status string `bson:"status" json:"status"`
+	Extra string `bson:"extra" json:"extra"`
 }
 
 type AdsList []Campaigns

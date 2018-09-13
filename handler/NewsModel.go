@@ -18,6 +18,8 @@ type NewsModel struct {
 	Image string `bson:"image" json:"image"`
 	PublishedAt time.Time	`bson:"published_at" json:"published_at"`
 	IsBreaking bool `bson:"is_breaking" json:"is_breaking"`
+	Status string `bson:"status" json:"status"`
+	Extra string `bson:"extra" json:"extra"`
 }
 
 type NewsList []NewsModel
