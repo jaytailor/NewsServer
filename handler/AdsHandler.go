@@ -41,7 +41,11 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, element := range ads{
-		mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, element)
+
+		// only return if status is active and not expired(need to add)
+		if element.Status == "active"{
+			mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, element)
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json;charset=UTF-8")

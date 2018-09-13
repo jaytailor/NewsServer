@@ -6,6 +6,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"fmt"
 	"strconv"
+	"time"
 )
 
 func GetAllVideos(w http.ResponseWriter, r *http.Request) {
@@ -56,6 +57,8 @@ func PostVideos(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	video.Id = bson.NewObjectId()
+	video.PushedAt = time.Now()
+	video.Video_Date = time.Now().Format("02-Jan-2006 15:04")
 
 	if err := mdao.InsertVideos(video); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())

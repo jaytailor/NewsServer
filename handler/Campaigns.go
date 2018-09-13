@@ -13,7 +13,6 @@ type AdsItems struct {
 type Campaigns struct {
 	Id	bson.ObjectId	`bson:"_id" json:"id"`
 	ImageUrl string `bson:"imageurl" json:"imageurl"`
-	Expired bool `bson:"expired" json:"expired"`
 	StartDate time.Time `bson:"start_date" json:"start_date"`
 	EndDate time.Time	`bson:"end_date" json:"end_date"`
 	ImpressionLimit string `bson:"impression_limit" json:"impression_limit"`

@@ -7,6 +7,7 @@ import (
 "gopkg.in/mgo.v2/bson"
 "fmt"
 "strconv"
+	"time"
 )
 
 func GetAllEditorial(w http.ResponseWriter, r *http.Request) {
@@ -58,6 +59,8 @@ func PostEditorial(w http.ResponseWriter, r *http.Request) {
 	}
 
 	article.Id = bson.NewObjectId()
+	article.PushedAt = time.Now()
+	article.PublishedAt = time.Now().Format("02-Jan-2006 15:04")
 
 	if err := mdao.InsertEditorial(article); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())

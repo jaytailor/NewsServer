@@ -42,7 +42,7 @@ func (m *DbDAO) FindAllNews() ([]NewsModel, error) {
 
 func (m *DbDAO) FindNumOfNews(number int) ([]NewsModel, error) {
 	var news []NewsModel
-	err := db.C(NEWS_TABLE).Find(bson.M{}).Sort("-published_at").Limit(number).All(&news)
+	err := db.C(NEWS_TABLE).Find(bson.M{}).Sort("-pushed_at").Sort("-is_breaking").Limit(number).All(&news)
 	return news, err
 }
 
@@ -82,7 +82,7 @@ func (m *DbDAO) FindAllCampaigns() ([]Campaigns, error) {
 
 func (m *DbDAO) FindNumOfAds(number int) ([]Campaigns, error) {
 	var campaigns []Campaigns
-	err := db.C(ADS_TABLE).Find(bson.M{}).Sort("-priority").Limit(number).All(&campaigns)
+	err := db.C(ADS_TABLE).Find(bson.M{}).Sort("priority", "-start_date").Limit(number).All(&campaigns)
 	return campaigns, err
 }
 
@@ -111,7 +111,7 @@ func (m *DbDAO) FindAllVideos() ([]Video, error) {
 
 func (m *DbDAO) FindNumOfVideos(number int) ([]Video, error) {
 	var video []Video
-	err := db.C(VIDEO_TABLE).Find(bson.M{}).Sort("-video_date").Limit(number).All(&video)
+	err := db.C(VIDEO_TABLE).Find(bson.M{}).Sort("-pushed_at").Limit(number).All(&video)
 	return video, err
 }
 
@@ -130,7 +130,7 @@ func (m *DbDAO) FindAllEditorial() ([]Editorial, error) {
 
 func (m *DbDAO) FindNumOfEditorial(number int) ([]Editorial, error) {
 	var editorials []Editorial
-	err := db.C(EDITORIALS).Find(bson.M{}).Sort("-published_at").Limit(number).All(&editorials)
+	err := db.C(EDITORIALS).Find(bson.M{}).Sort("-pushed_at").Limit(number).All(&editorials)
 	return editorials, err
 }
 

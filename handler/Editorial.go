@@ -16,7 +16,8 @@ type Editorial struct {
 	Content string `bson:"content" json:"content"`
 	Image string `bson:"image" json:"image"`
 	Writer string `bson:"writer" json:"writer"`
-	PublishedAt time.Time	`bson:"published_at" json:"published_at"`
+	PublishedAt string	`bson:"published_at" json:"published_at"`
+	PushedAt time.Time `bson:"pushed_at" json:"pushed_at"`
 	Status string `bson:"status" json:"status"`
 	Extra string `bson:"extra" json:"extra"`
 }

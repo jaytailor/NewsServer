@@ -62,7 +62,8 @@ func PostNews(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	samachar.Id = bson.NewObjectId()
-	samachar.PublishedAt = time.Now()
+	samachar.PushedAt = time.Now()
+	samachar.PublishedAt = time.Now().Format("02-Jan-2006 15:04")
 
 	if err := mdao.InsertNews(samachar); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
