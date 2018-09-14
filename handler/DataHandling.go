@@ -141,8 +141,8 @@ func (m *DbDAO) CreateLogins(credentials Logins) error {
 	return err
 }
 
-func (m *DbDAO) FindUsers() ([]Logins, error) {
+func (m *DbDAO) FindUsers(username string) ([]Logins, error) {
 	var credentials []Logins
-	err := db.C(LOGIN).Find(bson.M{}).All(&credentials)
+	err := db.C(LOGIN).Find(bson.M{"username": username}).All(&credentials)
 	return credentials, err
 }

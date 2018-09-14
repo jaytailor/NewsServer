@@ -16,13 +16,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	password, ok := r.URL.Query()["password"]
 
 	if !ok || len(username[0]) < 1 || len(password[0]) < 1 {
-		fmt.Println("Username or password is missing")
 		response.Authenticated = "INVALID";
 		response.Message = "No username password were sent in the request";
 		SendResponse(w, http.StatusNotImplemented, response)
 		return
 	}else {
-		logindetails, err := mdao.FindUsers();
+		logindetails, err := mdao.FindUsers(username[0]);
 
 		if err != nil{
 			fmt.Println("Error fetching user details")
@@ -39,7 +38,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		for _, element := range logindetails{
 
-			if element.User != username[0] {
+			if element.Username != username[0] {
 				response.Authenticated = "FALSE";
 				response.Message = "Username is wrong";
 				SendResponse(w, http.StatusForbidden, response);
@@ -77,7 +76,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	userdata.Id = bson.NewObjectId()
 
-	fmt.Println("Creating user now ", userdata.User, userdata.Password, userdata.Role);
+	fmt.Println("Creating user now ", userdata.Username, userdata.Password, userdata.Role);
 
 	if err := mdao.CreateLogins(userdata); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
