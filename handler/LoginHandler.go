@@ -63,38 +63,29 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 
+	// Load new user data from the post data
+	var userdata Logins
+
 	// Create a struct to respond back
 	response := Success{Authenticated: "TRUE", Message:"User Created Successfully"}
 
-	// Load new user data from the post data
-	var userdata Logins
 	if err := json.NewDecoder(r.Body).Decode(&userdata); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		panic(err)
 		return
 	}
 
-	newuser := Logins{};
+	userdata.Id = bson.NewObjectId()
 
-	newuser.Id = bson.NewObjectId()
-	newuser.User = userdata.User;
-	newuser.Password = userdata.Password;
-	newuser.Role = userdata.Role;
+	fmt.Println("Creating user now ", userdata.User, userdata.Password, userdata.Role);
 
-	fmt.Println("Creating user now %S %S %S", newuser.User, newuser.Password, newuser.Role);
-
-	if err := mdao.CreateLogins(newuser); err != nil {
+	if err := mdao.CreateLogins(userdata); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		panic(err)
-	}
+	SendResponse(w, http.StatusOK, response)
 }
 
 func SendResponse(w http.ResponseWriter, status int, response Success){
