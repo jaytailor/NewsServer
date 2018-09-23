@@ -7,6 +7,9 @@ import (
 "gopkg.in/mgo.v2/bson"
 	"fmt"
 	"strconv"
+//	"time"
+	"time"
+	"math/rand"
 )
 
 type ID struct {
@@ -18,7 +21,6 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 
 	mainNewsStruct := AdsItems{Status:"OK"}
 
-	//defer r.Body.Close()
 	keys, ok := r.URL.Query()["list"]
 	var numberOfAds int
 	if !ok || len(keys[0]) < 1 {
@@ -32,7 +34,7 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	ads, err := mdao.FindNumOfAds(numberOfAds)
+	ads, err := mdao.FindNumOfAds(numberOfAds, time.Now())
 
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -56,6 +58,50 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetAdsWithPriority(w http.ResponseWriter, r *http.Request) {
+
+	mainNewsStruct := AdsItems{Status:"OK"}
+
+	priority, ok := r.URL.Query()["priority"]
+	var adsPriority int
+	if !ok || len(priority[0]) < 1 {
+		adsPriority = 10
+	}else {
+		top, err := strconv.Atoi(priority[0])
+		if err == nil {
+			adsPriority = top
+		}
+	}
+
+	// Fetch the unexpired ad of a specific priority
+	ads, err := mdao.FindAdsOfPriority(strconv.Itoa(adsPriority), time.Now())
+
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		panic(err)
+		return
+	}
+
+	rand.Seed(time.Now().Unix())
+
+	// only if no ad is returned from database then
+	// add a two random ads from the same priority
+	if len(ads) != 0{
+		n := rand.Int() % len(ads)
+		mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, ads[n])
+		n2 := rand.Int() % len(ads)
+		mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, ads[n2])
+	}
+
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	if err := json.NewEncoder(w).Encode(mainNewsStruct); err != nil {
+		panic(err)
+	}
+}
+
+
 func PostAds(w http.ResponseWriter, r *http.Request) {
 
 	var ads Campaigns
@@ -65,6 +111,8 @@ func PostAds(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ads.Id = bson.NewObjectId()
+	ads.StartDate = time.Now()// start now
+	ads.EndDate = time.Now().AddDate(0, 1, 0) // end after one month
 
 	if err := mdao.InsertAds(ads); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())

@@ -4,6 +4,8 @@ import (
 	"log"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"fmt"
+	"time"
 )
 
 type DbDAO struct {
@@ -80,9 +82,16 @@ func (m *DbDAO) FindAllCampaigns() ([]Campaigns, error) {
 	return campaigns, err
 }
 
-func (m *DbDAO) FindNumOfAds(number int) ([]Campaigns, error) {
+func (m *DbDAO) FindNumOfAds(number int, nowdate time.Time) ([]Campaigns, error) {
 	var campaigns []Campaigns
-	err := db.C(ADS_TABLE).Find(bson.M{}).Sort("priority", "-start_date").Limit(number).All(&campaigns)
+	err := db.C(ADS_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}, "status":"active"}).Sort( "-priority").Limit(number).All(&campaigns)
+	return campaigns, err
+}
+
+func (m *DbDAO) FindAdsOfPriority(priority string, nowdate time.Time) ([]Campaigns, error) {
+	var campaigns []Campaigns
+	fmt.Println()
+	err := db.C(ADS_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate},"priority":priority, "status":"active"}).All(&campaigns)
 	return campaigns, err
 }
 
