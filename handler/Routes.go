@@ -57,6 +57,12 @@ var routes = Routes{
 		GetAdsWithPriority,
 	},
 	Route{
+		"GetAdsInOrder",
+		"GET",
+		"/ads",
+		GetAdsInOrder,
+	},
+	Route{
 		"DeleteAds",
 		"POST",
 		"/deleteads",

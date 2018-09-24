@@ -82,16 +82,24 @@ func (m *DbDAO) FindAllCampaigns() ([]Campaigns, error) {
 	return campaigns, err
 }
 
+// function to return active and unexpired campaign only
 func (m *DbDAO) FindNumOfAds(number int, nowdate time.Time) ([]Campaigns, error) {
 	var campaigns []Campaigns
 	err := db.C(ADS_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}, "status":"active"}).Sort( "priority").Limit(number).All(&campaigns)
 	return campaigns, err
 }
 
-func (m *DbDAO) FindAdsOfPriority(priority string, nowdate time.Time) ([]Campaigns, error) {
+func (m *DbDAO) FindAdsOfPriority(priority int, nowdate time.Time) ([]Campaigns, error) {
 	var campaigns []Campaigns
 	fmt.Println()
 	err := db.C(ADS_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate},"priority":priority, "status":"active"}).All(&campaigns)
+	return campaigns, err
+}
+
+func (m *DbDAO) FindAdsAbovePriority(priority int, nowdate time.Time) ([]Campaigns, error) {
+	var campaigns []Campaigns
+	fmt.Println()
+	err := db.C(ADS_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate},"priority":bson.M{"$gt":priority}, "status":"active"}).Sort( "priority").All(&campaigns)
 	return campaigns, err
 }
 
