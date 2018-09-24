@@ -5,9 +5,7 @@ import (
 "net/http"
 
 "gopkg.in/mgo.v2/bson"
-	"fmt"
 	"strconv"
-//	"time"
 	"time"
 	"math/rand"
 )
@@ -24,12 +22,10 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 	keys, ok := r.URL.Query()["list"]
 	var numberOfAds int
 	if !ok || len(keys[0]) < 1 {
-		//fmt.Println("Url Param 'key' is missing")
 		numberOfAds = 10
 	}else {
 		items, err := strconv.Atoi(keys[0])
 		if err == nil {
-			//fmt.Printf("Number of Ads.. ")
 			numberOfAds = items
 		}
 	}
@@ -44,8 +40,8 @@ func GetAllAds(w http.ResponseWriter, r *http.Request) {
 
 	for _, element := range ads{
 
-		// only return if status is active and not expired(need to add)
-		if element.Status == "active"{
+		// only add campaign of priority of 10 above
+		if element.Priority >= 10{
 			mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, element)
 		}
 	}
@@ -73,8 +69,8 @@ func GetAdsWithPriority(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Fetch the unexpired ad of a specific priority
-	ads, err := mdao.FindAdsOfPriority(strconv.Itoa(adsPriority), time.Now())
+	// Fetch the unexpired 10 ads of a specific priority sent in request
+	ads, err := mdao.FindAdsOfPriority(adsPriority, time.Now())
 
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -91,6 +87,64 @@ func GetAdsWithPriority(w http.ResponseWriter, r *http.Request) {
 		mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, ads[n])
 		n2 := rand.Int() % len(ads)
 		mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, ads[n2])
+	}
+
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	if err := json.NewEncoder(w).Encode(mainNewsStruct); err != nil {
+		panic(err)
+	}
+}
+
+// Function to send 20 ads in order.
+// First 5 ads will be of priority 11 and then in order
+func GetAdsInOrder(w http.ResponseWriter, r *http.Request) {
+
+	mainNewsStruct := AdsItems{Status:"OK"}
+
+	// Fetch the ads of priority of 11 for top 5 places in ads section
+	ads, err := mdao.FindAdsOfPriority(11, time.Now())
+
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		panic(err)
+		return
+	}
+
+	rand.Seed(time.Now().Unix())
+	count := 0
+
+	// check if ads are returned
+	if len(ads) != 0{
+		for count < 5 {
+			n := rand.Int() % len(ads)
+
+			// randomly select an ad of priority 11 and put it in response.
+			// This could send duplicate ads sometimes but we can fix it later
+			mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, ads[n])
+			count += 1
+		}
+	}
+
+	// Now get ads of priority of 12 and above
+	moreads, err := mdao.FindAdsAbovePriority(11, time.Now())
+
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		panic(err)
+		return
+	}
+
+	if len(moreads) != 0{
+		for count < 20 {
+			n := rand.Int() % len(moreads)
+
+			// randomly select an ad of priority above 11 and put it in response.
+			// This could send duplicate ads sometimes but we can fix it later
+			mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, moreads[n])
+			count += 1
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
@@ -131,7 +185,6 @@ func DeleteAds(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewDecoder(r.Body).Decode(&ad); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		fmt.Println("error in decoding")
 		panic(err)
 		return
 	}
