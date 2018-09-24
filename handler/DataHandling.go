@@ -44,7 +44,7 @@ func (m *DbDAO) FindAllNews() ([]NewsModel, error) {
 
 func (m *DbDAO) FindNumOfNews(number int) ([]NewsModel, error) {
 	var news []NewsModel
-	err := db.C(NEWS_TABLE).Find(bson.M{}).Sort("pushed_at").Sort("-is_breaking").Limit(number).All(&news)
+	err := db.C(NEWS_TABLE).Find(bson.M{}).Sort("-pushed_at").Limit(number).All(&news)
 	return news, err
 }
 
