@@ -84,7 +84,7 @@ func (m *DbDAO) FindAllCampaigns() ([]Campaigns, error) {
 
 func (m *DbDAO) FindNumOfAds(number int, nowdate time.Time) ([]Campaigns, error) {
 	var campaigns []Campaigns
-	err := db.C(ADS_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}, "status":"active"}).Sort( "-priority").Limit(number).All(&campaigns)
+	err := db.C(ADS_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}, "status":"active"}).Sort( "priority").Limit(number).All(&campaigns)
 	return campaigns, err
 }
 

@@ -112,7 +112,10 @@ func PostAds(w http.ResponseWriter, r *http.Request) {
 	}
 	ads.Id = bson.NewObjectId()
 	ads.StartDate = time.Now()// start now
+
+	// put default expiry date of one month
 	ads.EndDate = time.Now().AddDate(0, 1, 0) // end after one month
+
 
 	if err := mdao.InsertAds(ads); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
