@@ -15,7 +15,7 @@ type NewsModel struct {
 	Writer string `bson:"writer" json:"writer"`
 	Title string `bson:"title" json:"title"`
 	Content string `bson:"content" json:"content"`
-	Image string `bson:"image" json:"image"`
+	Image []string `bson:"image" json:"image"`
 	PublishedAt string	`bson:"published_at" json:"published_at"`
 	PushedAt time.Time `bson:"pushed_at" json:"pushed_at"`
 	IsBreaking bool `bson:"is_breaking" json:"is_breaking"`
