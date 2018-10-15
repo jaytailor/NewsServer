@@ -110,6 +110,18 @@ var routes = Routes{
 		"/createuser",
 		CreateUser,
 	},
+	Route{
+		"PostWishMessage",
+		"POST",
+		"/postwish",
+		PostWishMessage,
+	},
+	Route{
+		"GetAllWishes",
+		"GET",
+		"/getallwishes",
+		GetAllWishes,
+	},
 
 }
 

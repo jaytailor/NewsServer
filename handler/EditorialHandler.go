@@ -3,9 +3,7 @@ package handler
 import (
 "encoding/json"
 "net/http"
-
 "gopkg.in/mgo.v2/bson"
-"fmt"
 "strconv"
 	"time"
 )
@@ -18,13 +16,10 @@ func GetAllEditorial(w http.ResponseWriter, r *http.Request) {
 	keys, ok := r.URL.Query()["list"]
 	var numberOfArticles int
 	if !ok || len(keys[0]) < 1 {
-		fmt.Println("Url Param 'key' is missing")
 		numberOfArticles = 10
 	}else {
 		items, err := strconv.Atoi(keys[0])
 		if err == nil {
-			fmt.Printf("Number of Articles.. ")
-			fmt.Println(items)
 			numberOfArticles = items
 		}
 	}
