@@ -22,6 +22,7 @@ const (
 	EDITORIALS = "editorials"
 	LOGIN = "login"
 	MESSAGE_TABLE = "messages"
+	SURVEY_TABLE = "survey"
 )
 
 func (m *DbDAO) Connect() {
@@ -180,4 +181,28 @@ func (m *DbDAO) FindNMessages(number int, nowdate time.Time) ([]Message, error) 
 	var messages []Message
 	err := db.C(MESSAGE_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}}).Limit(number).All(&messages)
 	return messages, err
+}
+
+// Helper mongo functions for survey results
+
+func (m *DbDAO) InsertNewSurvey(survey Survey) error {
+	err := db.C(SURVEY_TABLE).Insert(&survey)
+	return err
+}
+
+func (m *DbDAO) FindAllSurveys() ([]Survey, error) {
+	var surveys []Survey
+	err := db.C(SURVEY_TABLE).Find(bson.M{}).All(&surveys)
+	return surveys, err
+}
+
+func (m *DbDAO) FindNSurveys(number int, nowdate time.Time) ([]Survey, error) {
+	var surveys []Survey
+	err := db.C(SURVEY_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}}).Limit(number).All(&surveys)
+	return surveys, err
+}
+
+func (m *DbDAO) UpdateSurvey(survey Survey) error {
+	err := db.C(SURVEY_TABLE).UpdateId(survey.Id, &survey)
+	return err
 }

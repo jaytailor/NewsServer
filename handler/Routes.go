@@ -122,6 +122,24 @@ var routes = Routes{
 		"/getallwishes",
 		GetAllWishes,
 	},
+	Route{
+		"PostSurvey",
+		"POST",
+		"/postsurvey",
+		PostSurvey,
+	},
+	Route{
+		"GetSurveyResult",
+		"GET",
+		"/getsurveyresult",
+		GetSurveyResult,
+	},
+	Route{
+		"UpdateSurvey",
+		"POST",
+		"/updatesurvey",
+		UpdateSurvey,
+	},
 
 }
 

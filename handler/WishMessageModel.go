@@ -19,4 +19,19 @@ type Message struct {
 	Extra string `bson:"extra" json:"extra"`
 }
 
+type SurveyItems struct {
+	Status string `json:"status" bson:"status"`
+	SurveyResult []Survey `json:"survey" bson:"survey"`
+}
+
+type Survey struct {
+	Id	bson.ObjectId	`bson:"_id" json:"id"`
+	SurveyText string `bson:"survey_text" json:"survey_text"`
+	Yes int `bson:"yes" json:"yes"`
+	No int `bson:"no" json:"no"`
+	StartDate time.Time `bson:"start_date" json:"start_date"`
+	EndDate time.Time	`bson:"end_date" json:"end_date"`
+	Extra string `bson:"extra" json:"extra"`
+}
+
 type MessageList []Message
