@@ -120,13 +120,13 @@ func GetAdsInOrder(w http.ResponseWriter, r *http.Request) {
 
 	// check if ads are returned
 	if len(ads) != 0{
-		for count < 5 {
-			n := rand.Int() % len(ads)
+		for count < len(ads) { // show priority 11 ads fetched from database ordered by start date
+			//n := rand.Int() % len(ads)
 
 			// randomly select an ad of priority 11 and put it in response.
-			if(!visitedAd[ads[n].Id.String()]){ // if ad is already not added then add it
-				mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, ads[n])
-				visitedAd [ads[n].Id.String()] = true
+			if(!visitedAd[ads[count].Id.String()]){ // if ad is already not added then add it to avoid repeated ads
+				mainNewsStruct.AdsItem = append(mainNewsStruct.AdsItem, ads[count])
+				visitedAd [ads[count].Id.String()] = true
 			}
 			count += 1
 		}
