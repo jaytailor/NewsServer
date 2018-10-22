@@ -26,7 +26,7 @@ const (
 )
 
 func (m *DbDAO) Connect() {
-	session, err := mgo.Dial(m.Server)
+	session, err := mgo.DialInfo{}(m.Server)
 	if err != nil {
 		log.Fatal(err)
 	}

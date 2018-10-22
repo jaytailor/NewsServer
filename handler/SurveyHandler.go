@@ -72,6 +72,25 @@ func UpdateSurvey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Now first find the survey you want to update
+	messages, err := mdao.FindNSurveys(1, time.Now())
+
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		panic(err)
+		return
+	}
+
+	// Make sure that only yes and no values are updated and nothing else.
+	// So following code will put values fetched from database. (dirty way though)
+	// Should be just able to update yes and no values in db.
+	if len(messages) != 0{
+		survey.SurveyText = messages[0].SurveyText
+		survey.StartDate = messages[0].StartDate
+		survey.EndDate = messages[0].EndDate
+		survey.Extra = messages[0].Extra
+	}
+
 	if err := mdao.UpdateSurvey(survey); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		panic(err)

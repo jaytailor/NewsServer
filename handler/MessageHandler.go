@@ -62,7 +62,7 @@ func PostWishMessage(w http.ResponseWriter, r *http.Request) {
 	message.StartDate = time.Now()// start now
 
 	// put default expiry date of 3 days
-	message.EndDate = time.Now().AddDate(3, 0, 0) // end after three days
+	message.EndDate = time.Now().AddDate(0, 0, 3) // end after three days
 
 	if err := mdao.InsertMessages(message); err != nil {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
