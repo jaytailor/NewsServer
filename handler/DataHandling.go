@@ -180,7 +180,7 @@ func (m *DbDAO) FindAllMessages() ([]Message, error) {
 
 func (m *DbDAO) FindNMessages(number int, nowdate time.Time) ([]Message, error) {
 	var messages []Message
-	err := db.C(MESSAGE_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}}).Limit(number).All(&messages)
+	err := db.C(MESSAGE_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}}).Sort("-start_date").Limit(number).All(&messages)
 	return messages, err
 }
 
