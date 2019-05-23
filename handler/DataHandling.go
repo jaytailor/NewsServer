@@ -23,6 +23,7 @@ const (
 	LOGIN = "login"
 	MESSAGE_TABLE = "messages"
 	SURVEY_TABLE = "survey"
+	BNEWS_TABLE = "bnews"
 )
 
 func (m *DbDAO) Connect() {
@@ -36,6 +37,34 @@ func (m *DbDAO) Connect() {
 
 
 // Helper mongo functions for News
+func (m *DbDAO) FindAllBNews() ([]BreakingNews, error) {
+	var bnews []BreakingNews
+	err := db.C(BNEWS_TABLE).Find(bson.M{}).All(&bnews)
+	return bnews, err
+}
+
+func (m *DbDAO) FindNumOfBNews(number int) ([]BreakingNews, error) {
+	var bnews []BreakingNews
+	err := db.C(BNEWS_TABLE).Find(bson.M{}).Sort("-pushed_at").Limit(number).All(&bnews)
+	return bnews, err
+}
+
+func (m *DbDAO) InsertBNews(bnews BreakingNews) error {
+	err := db.C(BNEWS_TABLE).Insert(&bnews)
+	return err
+}
+
+func (m *DbDAO) DeleteBNews(bnews BreakingNews) error {
+	err := db.C(BNEWS_TABLE).Remove(&bnews)
+	return err
+}
+
+func (m *DbDAO) UpdateBNews(bnews BreakingNews) error {
+	err := db.C(BNEWS_TABLE).UpdateId(bnews.Id, &bnews)
+	return err
+}
+
+// Helper mongo functions for Breaking News
 
 func (m *DbDAO) FindAllNews() ([]NewsModel, error) {
 	var news []NewsModel
