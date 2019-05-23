@@ -140,6 +140,18 @@ var routes = Routes{
 		"/updatesurvey",
 		UpdateSurvey,
 	},
+	Route{
+		"GetBreakingNews",
+		"GET",
+		"/breakingnews",
+		GetNumBNews,
+	},
+	Route{
+		"PostBreakingNews",
+		"POST",
+		"/postbreakingnews",
+		PostBreakingNews,
+	},
 
 }
 

@@ -25,3 +25,14 @@ type NewsModel struct {
 
 type NewsList []NewsModel
 
+type BreakingNewsItem struct {
+	Status string `json:"status" bson:"status"`
+	BNewsItems []BreakingNews  `json:"breakingnews" bson:"breakingnews"`
+}
+
+type BreakingNews struct {
+	Id	bson.ObjectId	`bson:"_id" json:"id"`
+	NewsFlash string `bson:"newsflash" json:"newsflash"`
+	PublishedAt string	`bson:"published_at" json:"published_at"`
+	PushedAt time.Time `bson:"pushed_at" json:"pushed_at"`
+}
