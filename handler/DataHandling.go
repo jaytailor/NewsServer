@@ -4,7 +4,6 @@ import (
 	"log"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"fmt"
 	"time"
 )
 
@@ -22,6 +21,8 @@ const (
 	VIDEO_TABLE = "videos"
 	EDITORIALS = "editorials"
 	LOGIN = "login"
+	MESSAGE_TABLE = "messages"
+	SURVEY_TABLE = "survey"
 )
 
 func (m *DbDAO) Connect() {
@@ -91,14 +92,13 @@ func (m *DbDAO) FindNumOfAds(number int, nowdate time.Time) ([]Campaigns, error)
 
 func (m *DbDAO) FindAdsOfPriority(priority int, nowdate time.Time) ([]Campaigns, error) {
 	var campaigns []Campaigns
-	fmt.Println()
 	err := db.C(ADS_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate},"priority":priority, "status":"active"}).Sort("-start_date").All(&campaigns)
+
 	return campaigns, err
 }
 
 func (m *DbDAO) FindAdsAbovePriority(priority int, nowdate time.Time) ([]Campaigns, error) {
 	var campaigns []Campaigns
-	fmt.Println()
 	err := db.C(ADS_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate},"priority":bson.M{"$gt":priority}, "status":"active"}).Sort( "priority").All(&campaigns)
 	return campaigns, err
 }
@@ -162,4 +162,48 @@ func (m *DbDAO) FindUsers(username string) ([]Logins, error) {
 	var credentials []Logins
 	err := db.C(LOGIN).Find(bson.M{"username": username}).All(&credentials)
 	return credentials, err
+}
+
+
+// Helper mongo functions for wish messages
+
+func (m *DbDAO) InsertMessages(message Message) error {
+	err := db.C(MESSAGE_TABLE).Insert(&message)
+	return err
+}
+
+func (m *DbDAO) FindAllMessages() ([]Message, error) {
+	var messages []Message
+	err := db.C(MESSAGE_TABLE).Find(bson.M{}).All(&messages)
+	return messages, err
+}
+
+func (m *DbDAO) FindNMessages(number int, nowdate time.Time) ([]Message, error) {
+	var messages []Message
+	err := db.C(MESSAGE_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}}).Sort("-start_date").Limit(number).All(&messages)
+	return messages, err
+}
+
+// Helper mongo functions for survey results
+
+func (m *DbDAO) InsertNewSurvey(survey Survey) error {
+	err := db.C(SURVEY_TABLE).Insert(&survey)
+	return err
+}
+
+func (m *DbDAO) FindAllSurveys() ([]Survey, error) {
+	var surveys []Survey
+	err := db.C(SURVEY_TABLE).Find(bson.M{}).All(&surveys)
+	return surveys, err
+}
+
+func (m *DbDAO) FindNSurveys(number int, nowdate time.Time) ([]Survey, error) {
+	var surveys []Survey
+	err := db.C(SURVEY_TABLE).Find(bson.M{"end_date":bson.M{"$gt":nowdate}}).Limit(number).All(&surveys)
+	return surveys, err
+}
+
+func (m *DbDAO) UpdateSurvey(survey Survey) error {
+	err := db.C(SURVEY_TABLE).UpdateId(survey.Id, &survey)
+	return err
 }
